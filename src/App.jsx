@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import CategoryNavBar from './components/CategoryNavBar'
+import Footer from './components/Footer'
 import Home from './components/Home'
 import TicTacToe from './components/TicTacToe'
 import RockPaperScissors from './components/RockPaperScissors'
@@ -46,6 +47,7 @@ function App() {
         <main className="container mx-auto px-4 py-6 sm:py-8">
           {renderGame()}
         </main>
+        <Footer />
       </div>
     </div>
   )
