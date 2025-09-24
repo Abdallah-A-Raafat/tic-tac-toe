@@ -41,6 +41,10 @@ const CategoryNavBar = ({ currentGame, setCurrentGame }) => {
     setOpenDropdown(null)
   }
 
+  const handleMobileMenuToggle = () => {
+    setOpenDropdown(openDropdown === 'mobile-menu' ? null : 'mobile-menu')
+  }
+
   const toggleDropdown = (categoryId) => {
     setOpenDropdown(openDropdown === categoryId ? null : categoryId)
   }
@@ -127,7 +131,7 @@ const CategoryNavBar = ({ currentGame, setCurrentGame }) => {
               <h1 className="text-xl font-bold text-white drop-shadow-lg">🎮 Mini Games</h1>
             </button>
             <button
-              onClick={() => setOpenDropdown(openDropdown ? null : 'mobile-menu')}
+              onClick={handleMobileMenuToggle}
               className="text-white p-2 rounded-lg hover:bg-white hover:bg-opacity-20 transition-colors"
             >
               <span className="text-xl">☰</span>
@@ -136,7 +140,7 @@ const CategoryNavBar = ({ currentGame, setCurrentGame }) => {
 
           {/* Mobile Dropdown */}
           {openDropdown === 'mobile-menu' && (
-            <div className="bg-white bg-opacity-10 backdrop-blur-md rounded-xl p-4 animate-fade-in">
+            <div className="bg-white bg-opacity-10 backdrop-blur-md rounded-xl p-4 animate-fade-in relative z-50">
               {categories.map((category) => (
                 <div key={category.id} className="mb-4 last:mb-0">
                   <div className={`flex items-center space-x-2 mb-2 px-3 py-2 rounded-lg bg-gradient-to-r ${category.color}`}>
@@ -147,8 +151,12 @@ const CategoryNavBar = ({ currentGame, setCurrentGame }) => {
                     {category.games.map((game) => (
                       <button
                         key={game.id}
-                        onClick={() => handleGameSelect(game.id)}
-                        className={`w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-left transition-colors duration-200 ${
+                        onClick={(e) => {
+                          e.preventDefault()
+                          e.stopPropagation()
+                          handleGameSelect(game.id)
+                        }}
+                        className={`w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-left transition-colors duration-200 relative z-10 ${
                           currentGame === game.id 
                             ? 'bg-white text-purple-700' 
                             : 'text-white hover:bg-white hover:bg-opacity-20'
@@ -166,8 +174,8 @@ const CategoryNavBar = ({ currentGame, setCurrentGame }) => {
         </div>
       </nav>
 
-      {/* Close dropdown when clicking outside */}
-      {openDropdown && (
+      {/* Close dropdown when clicking outside - only for desktop */}
+      {openDropdown && openDropdown !== 'mobile-menu' && (
         <div
           className="fixed inset-0 z-40"
           onClick={() => setOpenDropdown(null)}
